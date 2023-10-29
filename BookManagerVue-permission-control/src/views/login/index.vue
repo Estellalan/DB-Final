@@ -3,7 +3,7 @@
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
       <!-- 标题 -->
       <div class="title-container">
-        <h3 class="title">图书管理系统-登录界面</h3>
+        <h3 class="title">图书管理系统---登录界面</h3>
       </div>
       <!-- 用户名 -->
       <el-form-item prop="username">
@@ -206,7 +206,7 @@ $cursor: #fff;
 
 <style lang="scss" scoped>
 $bg:#2d3a4b;
-$dark_gray:#889aa4;
+$dark_gray:#88ac96;
 $light_gray:#eee;
 
 .login-container {

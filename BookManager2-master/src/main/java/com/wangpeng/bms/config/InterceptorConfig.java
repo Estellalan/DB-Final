@@ -1,7 +1,5 @@
 package com.wangpeng.bms.config;
 
-import com.wangpeng.bms.interceptor.ReaderInterceptor;
-import com.wangpeng.bms.interceptor.UserInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;

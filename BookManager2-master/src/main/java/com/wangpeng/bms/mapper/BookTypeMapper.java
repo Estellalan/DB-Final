@@ -1,6 +1,5 @@
 package com.wangpeng.bms.mapper;
 
-import com.wangpeng.bms.model.BookInfo;
 import com.wangpeng.bms.model.BookType;
 import org.apache.ibatis.annotations.Param;
 

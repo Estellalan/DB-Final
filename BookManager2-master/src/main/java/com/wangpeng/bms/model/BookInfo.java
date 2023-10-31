@@ -21,6 +21,36 @@ public class BookInfo {
 
     private String bookimg;
 
+    private int bookNum;
+
+    private double bookSore;
+
+    private int bookSoreCount;
+
+    public int getBookNum() {
+        return bookNum;
+    }
+
+    public void setBookNum(int bookNum) {
+        this.bookNum = bookNum;
+    }
+
+    public double getBookSore() {
+        return bookSore;
+    }
+
+    public void setBookSore(double bookSore) {
+        this.bookSore = bookSore;
+    }
+
+    public int getBookSoreCount() {
+        return bookSoreCount;
+    }
+
+    public void setBookSoreCount(int bookSoreCount) {
+        this.bookSoreCount = bookSoreCount;
+    }
+
     public Integer getBookid() {
         return bookid;
     }

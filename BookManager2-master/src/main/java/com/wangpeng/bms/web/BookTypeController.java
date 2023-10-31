@@ -2,7 +2,6 @@ package com.wangpeng.bms.web;
 
 import com.wangpeng.bms.model.BookType;
 import com.wangpeng.bms.service.BookTypeService;
-import com.wangpeng.bms.utils.JsonUtil;
 import com.wangpeng.bms.utils.MyResult;
 import com.wangpeng.bms.utils.MyUtils;
 import org.springframework.beans.factory.annotation.Autowired;

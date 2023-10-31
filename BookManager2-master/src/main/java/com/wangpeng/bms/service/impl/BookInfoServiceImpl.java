@@ -22,6 +22,7 @@ public class BookInfoServiceImpl implements BookInfoService {
 
     @Override
     public List<BookInfo> queryBookInfos() {
+        System.out.println(bookInfoMapper.selectAll());
         return bookInfoMapper.selectAll();
     }
 
@@ -37,6 +38,8 @@ public class BookInfoServiceImpl implements BookInfoService {
 
     @Override
     public List<BookInfo> searchBookInfosByPage(Map<String, Object> params) {
+        List<BookInfo> list = bookInfoMapper.selectBySearch(params);
+        //System.out.println("searchBookInfosByPage:"+list);
         return bookInfoMapper.selectBySearch(params);
     }
 

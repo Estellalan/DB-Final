@@ -127,7 +127,7 @@
     where bookId = #{bookid,jdbcType=INTEGER}
   </update>
   <select id="selectAllByLimit" resultMap="BaseResultMap">
-    select bookId, bookName, bookAuthor,bookPrice, bookTypeId, bookDesc,isBorrowed, bookImg,
+    select bookId, bookName, bookAuthor,bookPrice, bookTypeId, bookDesc,isBorrowed, bookImg,bookNum,bookSore,bookSoreCount,
            (select bookTypeName from book_type where book_type.bookTypeId = book_info.bookTypeId) as bookTypeName
     from book_info
     limit #{begin}, #{size}
@@ -150,8 +150,8 @@
     </where>
   </select>
   <select id="selectBySearch" resultMap="BaseResultMap">
-    select bookId, bookName, bookAuthor,bookPrice, bookTypeId, bookDesc,isBorrowed, bookImg,
-           (select bookTypeName from book_type where book_type.bookTypeId = book_info.bookTypeId) as bookTypeName
+    select bookId, bookName, bookAuthor,bookPrice, bookTypeId, bookDesc,isBorrowed, bookImg,bookNum,bookSore,bookSoreCount,
+    (select bookTypeName from book_type where book_type.bookTypeId = book_info.bookTypeId) as bookTypeName
     from book_info
     <where>
       <if test="bookname != null and bookname != '' ">
@@ -167,7 +167,7 @@
     limit #{begin}, #{size}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
-    select bookId, bookName, bookAuthor,bookPrice, bookTypeId, bookDesc,isBorrowed, bookImg,
+    select bookId, bookName, bookAuthor,bookPrice, bookTypeId, bookDesc,isBorrowed, bookImg,bookNum,bookSore,bookSoreCount,
            (select bookTypeName from book_type where book_type.bookTypeId = book_info.bookTypeId) as bookTypeName
     from book_info
   </select>
@@ -180,7 +180,7 @@
     </where>
   </select>
   <select id="selectByType" resultMap="BaseResultMap">
-    select bookId, bookName, bookAuthor,bookPrice, bookTypeId, bookDesc,isBorrowed, bookImg,
+    select bookId, bookName, bookAuthor,bookPrice, bookTypeId, bookDesc,isBorrowed, bookImg,bookNum,bookSore,bookSoreCount,
     (select bookTypeName from book_type where book_type.bookTypeId = book_info.bookTypeId) as bookTypeName
     from book_info
     <where>

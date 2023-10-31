@@ -137,7 +137,7 @@
       </el-table-column>
       <el-table-column
           prop="bookauthor"
-          label="图书作者"
+          label="图书作者hhhhhhhh"
           width="100"
           show-overflow-tooltip>
       </el-table-column>
@@ -217,6 +217,8 @@ export default {
     // 从服务器获取数据表格第一页的信息
     queryBookInfosByPage(this.queryParam).then(res => {
       console.log('首页数据获取成功',res)
+      console.log("测试显示图书的bookNum",res.data[0].bookNum)
+
       this.tableData = res.data
       this.recordTotal = res.count
     })

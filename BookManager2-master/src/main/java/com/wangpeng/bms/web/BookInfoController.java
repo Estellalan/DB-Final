@@ -26,17 +26,24 @@ public class BookInfoController {
     // 查询所有图书信息
     @GetMapping(value = "/queryBookInfos")
     public List<BookInfo> queryBookInfos(){
+        //System.out.println("调用queryBoolInfos");
         return bookInfoService.queryBookInfos();
     }
 
     // 分页搜索查询图书信息 params: {page, limit, bookname, bookauthor, booktypeid}
     @GetMapping(value = "/queryBookInfosByPage")
     public Map<String, Object> queryBookInfosByPage(@RequestParam Map<String, Object> params){
+        //System.out.println("调用queryBookInfosByPage");
         MyUtils.parsePageParams(params);
         int count = bookInfoService.getSearchCount(params);  // 获得总数
         List<BookInfo> bookInfos = bookInfoService.searchBookInfosByPage(params);  // 分页查询
+        //System.out.println(bookInfos.get(0).getBookNum());
         return MyResult.getListResultMap(0, "success", count, bookInfos);
     }
+
+    //获取前端评分，更新后端图书分数
+    @GetMapping(value = "/updateBookSore")
+
 
     // 添加图书信息
     @PostMapping(value = "/addBookInfo")

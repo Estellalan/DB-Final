@@ -1,10 +1,8 @@
 package com.wangpeng.bms.service.impl;
 
-import com.mysql.cj.util.TimeUtil;
 import com.wangpeng.bms.mapper.UserMapper;
 import com.wangpeng.bms.model.User;
 import com.wangpeng.bms.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.stereotype.Service;

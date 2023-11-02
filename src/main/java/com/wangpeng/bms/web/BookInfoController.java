@@ -2,9 +2,11 @@ package com.wangpeng.bms.web;
 
 import com.wangpeng.bms.model.BookInfo;
 import com.wangpeng.bms.service.BookInfoService;
+import com.wangpeng.bms.utils.ApiResponse;
 import com.wangpeng.bms.utils.MyResult;
 import com.wangpeng.bms.utils.MyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -42,15 +44,14 @@ public class BookInfoController {
     }
 
     //获取前端评分，更新后端图书分数
-    @GetMapping(value = "/rateBook")
-    public Integer rateBook(@RequestParam Integer bookId, @RequestParam double score) {
+    @PutMapping(value = "/rateBook")
+    public ResponseEntity<ApiResponse> rateBook(@RequestParam Integer bookId, @RequestParam double score) {
         try {
-            // 调用服务层方法来更新书籍评分和评论数量
             bookInfoService.rateBook(bookId, score);
-            return 1;
+            return ResponseEntity.ok(ApiResponse.success());
         } catch (Exception e) {
             e.printStackTrace();
-            return 0;
+            return ResponseEntity.badRequest().body(ApiResponse.failure(e.getMessage()));
         }
     }
 

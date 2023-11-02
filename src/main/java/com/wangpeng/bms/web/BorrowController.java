@@ -6,15 +6,14 @@ import com.wangpeng.bms.model.BookInfo;
 import com.wangpeng.bms.model.Borrow;
 import com.wangpeng.bms.service.BookInfoService;
 import com.wangpeng.bms.service.BorrowService;
+import com.wangpeng.bms.utils.ApiResponse;
 import com.wangpeng.bms.utils.MyResult;
 import com.wangpeng.bms.utils.MyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
@@ -36,6 +35,17 @@ public class BorrowController {
         int count = borrowService.getSearchCount(params);
         List<Borrow> borrows = borrowService.searchBorrowsByPage(params);
         return MyResult.getListResultMap(0, "success", count, borrows);
+    }
+
+    @PutMapping("/updateLimitDays")
+    public ResponseEntity<ApiResponse> updateLimitDays(@RequestParam("borrowid") int borrowId,
+                                                       @RequestParam("limitdays") int limitDays) {
+        try {
+            borrowService.updateLimitDays(borrowId, limitDays);
+            return ResponseEntity.ok(ApiResponse.success());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ApiResponse.failure(e.getMessage()));
+        }
     }
 
     // 添加借阅

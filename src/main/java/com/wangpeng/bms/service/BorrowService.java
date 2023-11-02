@@ -25,4 +25,6 @@ public interface BorrowService {
     Integer updateBorrow2(Borrow borrow);
 
     Borrow queryBorrowsById(Integer borrowid);
+
+    void updateLimitDays(int borrowId, int limitDays);
 }

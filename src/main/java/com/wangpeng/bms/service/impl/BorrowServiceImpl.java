@@ -4,6 +4,7 @@ import com.wangpeng.bms.mapper.BorrowMapper;
 import com.wangpeng.bms.model.Borrow;
 import com.wangpeng.bms.service.BorrowService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.text.ParseException;
@@ -74,7 +75,15 @@ public class BorrowServiceImpl implements BorrowService {
         }
         return count;
     }
-
+    @Override
+    public void updateLimitDays(int borrowId, int limitDays) {
+        Borrow borrow = borrowMapper.selectById(borrowId);
+        if (borrow == null) {
+            throw new RuntimeException("Borrow record not found");
+        }
+        borrow.setLimitDays(limitDays);
+        borrowMapper.update(borrow);
+    }
     @Override
     public Integer updateBorrow(Borrow borrow) {
         // 将string类型的时间重新调整

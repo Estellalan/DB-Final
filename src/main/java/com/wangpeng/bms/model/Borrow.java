@@ -3,13 +3,13 @@ package com.wangpeng.bms.model;
 import java.util.Date;
 
 public class Borrow {
-    private Integer borrowid;
+    private Integer borrowId;
 
     private Integer userid;
 
     private String username;
 
-    private Integer bookid;
+    private Integer bookId;
 
     private String bookname;
 
@@ -19,14 +19,32 @@ public class Borrow {
 
     private Date returntime;
 
+    public Integer getBookId() {
+        return bookId;
+    }
+
+    public void setBookId(Integer bookId) {
+        this.bookId = bookId;
+    }
+
+    public Integer getLimitDays() {
+        return limitDays;
+    }
+
+    public void setLimitDays(Integer limitDays) {
+        this.limitDays = limitDays;
+    }
+
     private String returntimestr;
 
+    private Integer limitDays;
+
     public Integer getBorrowid() {
-        return borrowid;
+        return borrowId;
     }
 
     public void setBorrowid(Integer borrowid) {
-        this.borrowid = borrowid;
+        this.borrowId = borrowid;
     }
 
     public Integer getUserid() {
@@ -46,11 +64,11 @@ public class Borrow {
     }
 
     public Integer getBookid() {
-        return bookid;
+        return bookId;
     }
 
     public void setBookid(Integer bookid) {
-        this.bookid = bookid;
+        this.bookId = bookid;
     }
 
     public String getBookname() {

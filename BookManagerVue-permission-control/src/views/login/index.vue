@@ -59,7 +59,7 @@
         <el-button :loading="loading" type="success" style="width: 48%; float: right;" @click.native.prevent="handleRegister">注册</el-button>
       </div>
 
-      <!-- 提示 
+      <!-- 提示 -->
       <div>
         <div class="tips">
           <span style="margin-right:20px;">管理员 username: admin</span>
@@ -69,7 +69,7 @@
           <span style="margin-right:20px;">读者 username: wangpeng</span>
           <span> password: 123456</span>
         </div>
-      </div>-->
+      </div>
     </el-form>
   </div>
 </template>
@@ -139,7 +139,7 @@ export default {
 /* 修复input 背景不协调 和光标变色 */
 /* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
 
-$bg:#28433d;
+$bg:#283443;
 $light_gray:#fff;
 $cursor: #fff;
 
@@ -162,7 +162,7 @@ $cursor: #fff;
       -webkit-appearance: none;
       border-radius: 0px;
       padding: 12px 5px 12px 15px;
-      color: $bg;
+      color: $light_gray;
       height: 47px;
       caret-color: $cursor;
 
@@ -184,7 +184,7 @@ $cursor: #fff;
       -webkit-appearance: none;
       border-radius: 0px;
       padding: 12px 5px 12px 15px;
-      color: $bg;
+      color: $light_gray;
       height: 47px;
       caret-color: $cursor;
 
@@ -205,9 +205,9 @@ $cursor: #fff;
 </style>
 
 <style lang="scss" scoped>
-$bg:#d9e7f8;
-$dark_gray:#4f6e5b;
-$light_gray:#fdfdfd;
+$bg:#2d3a4b;
+$dark_gray:#88ac96;
+$light_gray:#eee;
 
 .login-container {
   min-height: 100%;
@@ -247,9 +247,9 @@ $light_gray:#fdfdfd;
   .title-container {
     position: relative;
 
-    .title { //标题样式
-      font-size: 35px;
-      color: #0b3a66;
+    .title {
+      font-size: 26px;
+      color: $light_gray;
       margin: 0px auto 40px auto;
       text-align: center;
       font-weight: bold;

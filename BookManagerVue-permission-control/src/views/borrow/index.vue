@@ -21,6 +21,28 @@
       </el-button> -->
     </div>
 
+    <!--弹出框-->
+    <el-dialog title="修改有效时长" :visible.sync="dialogFormVisible" width="40%">
+      <!--普通表单-->
+      <el-form :model="form"  label-width="80px">
+        <el-form-item label="用户名" prop="username">
+          <el-input v-model="form.username" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="图书名称" prop="bookname">
+          <el-input v-model="form.bookname" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="有效时长" prop="limitDays">
+          <el-input v-model="form.limitDays"></el-input>
+
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="submitForm">确 定</el-button>
+      </div>
+    </el-dialog>
+
+
     <!--数据表格-->
     <el-table
         ref="multipleTable"
@@ -60,11 +82,28 @@
           </template>
       </el-table-column>
       <el-table-column
+          prop="limitDays"
+          show-overflow-tooltip
+          label="有效时长">    
+      </el-table-column>
+      <el-table-column
+          label="当前状态"
+          width="100">
+          <template slot-scope="scope">
+            <el-tag
+              :type="scope.row.returntimestr === null || scope.row.returntimestr === '' ? (checkDate(scope.row)  > 0 ? `danger` :'success')  : 'success'"
+              disable-transitions>
+              {{ (scope.row.returntimestr === null || scope.row.returntimestr === '') ? (checkDate(scope.row)  > 0 ? `罚款 ${checkDate(scope.row)} 元` :'正常') : '正常'}}
+            </el-tag>
+          </template>
+      </el-table-column>
+      <el-table-column
           fixed="right"
           label="操作"
-          :width="roleIsAdmin?'180px':'110px'">
+          :width="roleIsAdmin?'280px':'110px'">
         <template slot-scope="scope">
           <el-button v-permission="['admin']" @click="handleDelete(scope.row,scope.$index)" type="danger" size="small">删除</el-button>
+          <el-button v-permission="['admin']" @click="handleVaildDays(scope.row,scope.$index)" type="success" size="small">修改有效时长</el-button>
           <el-button @click="handleReturn(scope.row,scope.$index)" type="success" size="small">归还图书</el-button>
         </template>
       </el-table-column>
@@ -89,7 +128,7 @@
 import { mapGetters } from 'vuex'
 import permission from '@/directive/permission/index.js' // 权限判断指令
 import waves from '@/directive/waves' // waves directive
-import { getCount,queryBorrows,queryBorrowsByPage,addBorrow,deleteBorrow,deleteBorrows,updateBorrow,returnBook } from '@/api/borrow'
+import { getCount,queryBorrows,queryBorrowsByPage,addBorrow,deleteBorrow,deleteBorrows,updateBorrow,returnBook,updateLimitDays } from '@/api/borrow'
 
 export default {
   name: 'Bookinfo',
@@ -218,6 +257,71 @@ export default {
       })
     },
 
+    // 修改有效时间
+    handleVaildDays(row, index){
+      this.form = {
+        bookid: row.bookid,
+        bookname: row.bookname,
+        borrowid: row.borrowid,
+        borrowtime: row.borrowtime,
+        borrowtimestr: row.borrowtimestr,
+        userid: row.userid,
+        username: row.username,
+        limitDays: row.limitDays
+      }
+
+      // 显示表单框
+      this.dialogFormVisible = true
+    },
+
+    // 检查是否超时
+    checkDate(row){
+      // 将目标日期字符串解析为日期对象
+      const targetDate = new Date(row.borrowtimestr);
+
+      // 获取当前日期
+      const currentDate = new Date();
+
+      // 计算时间差
+      const timeDifference = currentDate - targetDate;
+
+      // 将毫秒数转换为天数
+      const daysDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+
+      console.log(`距离 ${row.borrowtimestr} 相差 ${daysDifference} 天。`);
+
+      console.log('------daysDifference-----',daysDifference / 30)
+      let money =  Math.floor(daysDifference / 30) * 5;
+
+      return money
+    },
+
+    // 确定修改
+    submitForm(){
+
+
+      console.log('----limitDays--->>>>',this.form.limitDays-0)
+      console.log('----borrowid---->>>>',this.form.borrowid)
+      let submitData = {
+        borrowid : this.form.borrowid-0,
+        limitdays : this.form.limitDays-0,
+      }
+      updateLimitDays(submitData).then(res => {
+        console.log('----res---',res)
+          if(res.status === 'ok') {
+            this.$message.success('修改时长成功')
+            this.handleCurrentChange(this.queryParam.page)
+          } else {
+            this.$message.error('修改时长失败'+ res.message)
+          }
+        })
+
+
+      // 显示表单框
+      this.dialogFormVisible = false
+    }
+    
+
     // 批量还书
     // handleReturn(row, index) {
     //   this.$confirm('确定要还书吗?', '提示', {
@@ -250,6 +354,19 @@ export default {
         userid: null,
         username: null,
         bookname: null,
+      },
+      // 表单显示
+      dialogFormVisible:false,
+      //表单数据
+      form:{
+        bookid: null,
+        bookname: "",
+        borrowid: null,
+        borrowtime: "",
+        borrowtimestr: "",
+        userid: null,
+        username: "",
+        limitDays:null
       }
     }
   },

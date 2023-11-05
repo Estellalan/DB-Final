@@ -117,7 +117,7 @@
       </el-table-column>
       <el-table-column
           fixed
-          prop="bookid"
+          prop="bookId"
           label="序号"
           width="100">
       </el-table-column>
@@ -159,11 +159,14 @@
           show-overflow-tooltip>
       </el-table-column>
       <el-table-column
-          label="图书状态"
+          label="图书库存"
+          v-if="roleIsAdmin === true" 
+          :filters="[{text: '无库存', value: 0}]"
+          :filter-method="filterHandler"
           width="100">
           <template slot-scope="scope">
-            <span v-if="scope.row.isborrowed === 1" style="color: red">已借出</span>
-            <span v-else style="color: #1aac1a">未借出</span>
+            <span v-if="scope.row.bookNum === 0" style="color: red">{{scope.row.bookNum}}</span>
+            <span v-else style="color: #1aac1a">{{scope.row.bookNum}}</span>
           </template>
       </el-table-column>
       <el-table-column
@@ -473,6 +476,12 @@ export default {
         })
       })
     },
+
+    // 筛选有无库存
+    filterHandler(value, row, column){
+
+      return row['bookNum'] === value;
+    }
 
   },
   data() {

@@ -84,3 +84,13 @@ export function returnBook(borrowid, bookid) {
         }
     })
 }
+
+
+// 修改有效时长
+export function updateLimitDays(data) {
+    return request({
+        url: '/borrow/updateLimitDays',
+        method: 'put',
+        data
+    })
+}

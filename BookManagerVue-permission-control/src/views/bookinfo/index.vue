@@ -104,6 +104,52 @@
       </div>
     </el-dialog>
 
+    <!--弹出框3-->
+    <el-dialog title="评分" :visible.sync="dialogFormVisible3" width="40%">
+      <el-row>
+        <el-col :span="16">
+          <!--普通表单-->
+          <el-form :model="form3"  label-width="80px">
+
+            <el-form-item label="图书名称" prop="bookname">
+              <el-input v-model="form3.bookname" readonly></el-input>
+            </el-form-item>
+
+            <el-form-item label="作者" prop="bookauthor">
+              <el-input v-model="form3.bookauthor" readonly></el-input>
+            </el-form-item>
+
+            <el-form-item label="图书类型" prop="booktypeid">
+              <el-input v-model="form3.booktypeid" readonly>
+              </el-input>
+            </el-form-item>
+            <el-form-item label="评分" prop="myRate">
+              <el-rate
+              margin-top='10px'
+                v-model="form3.myRate"
+                show-text
+                :texts="['很差','较差','还行','推荐','力荐']"
+                :colors="colors"        
+                >
+              </el-rate>
+            </el-form-item>
+          </el-form>
+        </el-col>
+        <el-col :span="8">
+          <div align="center">
+            <img v-if="form3.bookimg" :src="form3.bookimg" class="avatar" alt="封面无法显示">
+            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            </el-upload>
+          </div>
+        </el-col>
+      </el-row>
+
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible3 = false">取 消</el-button>
+        <el-button type="primary" @click="submitForm3">确 定</el-button>
+      </div>
+    </el-dialog>
+
     <!--数据表格-->
     <el-table
         ref="multipleTable"
@@ -159,6 +205,15 @@
           show-overflow-tooltip>
       </el-table-column>
       <el-table-column
+          label="图书评分"
+          v-if="roleIsAdmin === false" 
+          width="100">
+          <template slot-scope="scope">
+            <span v-if="scope.row.bookSore === null" style="color: red">{{scope.row.bookSore}}</span>
+            <span v-else style="color: #1aac1a">{{scope.row.bookSore === 0 ? '暂无评分' : scope.row.bookSore}}</span>
+          </template>
+      </el-table-column>
+      <el-table-column
           label="图书库存"
           v-if="roleIsAdmin === true" 
           :filters="[{text: '无库存', value: 0}]"
@@ -172,10 +227,11 @@
       <el-table-column
           fixed="right"
           label="操作"
-          :width="roleIsAdmin?'240px':'110px'">
+          :width="roleIsAdmin?'240px':'180px'">
         <template slot-scope="scope">
           <el-button v-permission="['admin']" @click="handleUpdate(scope.row)" type="primary" size="small">编辑</el-button>
           <el-button v-permission="['admin']" @click="handleDelete(scope.row,scope.$index)" type="danger" size="small">删除</el-button>
+          <el-button v-permission="['reader']" @click="handleRate(scope.row,scope.$index)" type="primary" size="small">评分</el-button>
           <el-button @click="handleBorrow(scope.row)" type="success" size="small">借阅图书</el-button>
         </template>
       </el-table-column>
@@ -206,7 +262,8 @@ import {
   addBookInfo,
   deleteBookInfo,
   deleteBookInfos,
-  updateBookInfo
+  updateBookInfo,
+  addRateBook
 } from '@/api/bookinfo'
 import { queryBookTypes } from '@/api/booktype'
 import { borrowBook } from '@/api/borrow'
@@ -481,6 +538,56 @@ export default {
     filterHandler(value, row, column){
 
       return row['bookNum'] === value;
+    },
+
+    // 评分
+    handleRate( row, column){
+      this.form3 = {
+        bookid: row.bookId,
+        bookname: row.bookname,
+        bookauthor: row.bookauthor,
+        bookprice: row.bookprice,
+        booktypeid: row.booktypeid,
+        bookdesc: row.bookdesc,
+        isborrowed: row.isborrowed,
+        bookimg: row.bookimg,
+        bookSore: row.bookSore,
+        myRate:0
+      }
+
+      // 显示表单框
+      this.dialogFormVisible3 = true
+    },
+
+    // 提交评分
+    submitForm3(){
+      // updateBookInfo(this.form).then(res => {
+      //     if(res === 1) {
+      //       this.$message.success('更新记录成功')
+      //       this.handleCurrentChange(this.queryParam.page)
+      //     } else {
+      //       this.$message.error('更新记录失败')
+      //     }
+      //     this.dialogFormVisible = false  // 关闭对话框
+      //   })
+      
+      // 当前form3的信息
+      let submitData = {
+        "bookid" : this.form3.bookid,
+        "score" : this.form3.myRate * 2,
+        "userid" : this.id
+      }
+
+      addRateBook(submitData).then(res => {
+        if(res.status === 'ok'){
+          this.$message.success('评分成功')
+          this.handleCurrentChange(this.queryParam.page)
+        } else{
+          this.$message.error('评分失败')
+        }
+        // 显示表单框
+      this.dialogFormVisible3 = false
+      })
     }
 
   },
@@ -505,6 +612,7 @@ export default {
       // 对话框表单显示
       dialogFormVisible: false,
       dialogFormVisible2: false,
+      dialogFormVisible3: false,
       // 表单类型（添加数据:0,修改数据:1）
       formType: 0,
       // 表单数据
@@ -522,6 +630,19 @@ export default {
         userid: 1,
         bookid: 1
       },
+      form3:{
+        bookid: null,
+        bookname: '',
+        bookauthor: '',
+        bookprice: 0,
+        booktypeid: 1,
+        bookdesc: '',
+        isborrowed: 0,
+        bookimg: '',
+        bookSore:'',
+        myRate:''
+      },
+      colors: ['#99A9BF', '#F7BA2A', '#FF9900'],
       rules: {
         bookname: [
           { required: true, message: '请输入图书名称', trigger: 'blur' }
@@ -583,5 +704,9 @@ export default {
     width: 150px;
     height: 200px;
     display: block;
+  }
+  
+  .el-rate{
+    line-height:3;
   }
 </style>

@@ -60,3 +60,12 @@ export function updateBookInfo(data) {
         data
     })
 }
+
+// 添加图书评分信息
+export function addRateBook(data) {
+    return request({
+        url: '/bookInfo/rateBook',
+        method: 'put',
+        data
+    })
+}

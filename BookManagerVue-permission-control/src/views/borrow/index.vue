@@ -26,14 +26,13 @@
       <!--普通表单-->
       <el-form :model="form"  label-width="80px">
         <el-form-item label="用户名" prop="username">
-          <el-input v-model="form.username" disabled></el-input>
+          <el-input v-model="form.username" readonly></el-input>
         </el-form-item>
         <el-form-item label="图书名称" prop="bookname">
-          <el-input v-model="form.bookname" disabled></el-input>
+          <el-input v-model="form.bookname" readonly></el-input>
         </el-form-item>
         <el-form-item label="有效时长" prop="limitDays">
-          <el-input v-model="form.limitDays"></el-input>
-
+          <el-input-number v-model="form.limitDays" :step="30" :min="0"></el-input-number>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -85,6 +84,11 @@
           prop="limitDays"
           show-overflow-tooltip
           label="有效时长">    
+          <template slot-scope="scope">
+            <span>
+              {{scope.row.limitDays === null ? 0 : scope.row.limitDays}}
+            </span>
+          </template>
       </el-table-column>
       <el-table-column
           label="当前状态"
@@ -100,7 +104,7 @@
       <el-table-column
           fixed="right"
           label="操作"
-          :width="roleIsAdmin?'280px':'110px'">
+          :width="roleIsAdmin?'300px':'110px'">
         <template slot-scope="scope">
           <el-button v-permission="['admin']" @click="handleDelete(scope.row,scope.$index)" type="danger" size="small">删除</el-button>
           <el-button v-permission="['admin']" @click="handleVaildDays(scope.row,scope.$index)" type="success" size="small">修改有效时长</el-button>
@@ -267,7 +271,8 @@ export default {
         borrowtimestr: row.borrowtimestr,
         userid: row.userid,
         username: row.username,
-        limitDays: row.limitDays
+        limitDays: row.limitDays,
+        lineIndex : index
       }
 
       // 显示表单框
@@ -290,8 +295,15 @@ export default {
 
       console.log(`距离 ${row.borrowtimestr} 相差 ${daysDifference} 天。`);
 
-      console.log('------daysDifference-----',daysDifference / 30)
-      let money =  Math.floor(daysDifference / 30) * 5;
+      // 超过限额后的收费标准 null 按 0 处理
+
+      let limitDays = row.limitDays === null ? 0 : row.limitDays
+
+      let money = 0
+
+      if(daysDifference > limitDays){
+        money =  Math.ceil((daysDifference - row.limitDays) / 30) * 5;
+      }
 
       return money
     },
@@ -299,20 +311,22 @@ export default {
     // 确定修改
     submitForm(){
 
+      this.tableData[this.form.lineIndex].limitDays = this.form.limitDays-0
+      
 
-      console.log('----limitDays--->>>>',this.form.limitDays-0)
-      console.log('----borrowid---->>>>',this.form.borrowid)
       let submitData = {
         borrowid : this.form.borrowid-0,
         limitdays : this.form.limitDays-0,
       }
+
+
       updateLimitDays(submitData).then(res => {
         console.log('----res---',res)
           if(res.status === 'ok') {
-            this.$message.success('修改时长成功')
+            this.$message.success('修改有效时长成功')
             this.handleCurrentChange(this.queryParam.page)
           } else {
-            this.$message.error('修改时长失败'+ res.message)
+            this.$message.error('修改有效时长失败'+ res.message)
           }
         })
 
@@ -366,7 +380,8 @@ export default {
         borrowtimestr: "",
         userid: null,
         username: "",
-        limitDays:null
+        limitDays:null,
+        lineIndex : null
       }
     }
   },

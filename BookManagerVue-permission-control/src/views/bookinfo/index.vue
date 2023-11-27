@@ -3,11 +3,17 @@
     <!-- 顶部功能 -->
     <div class="filter-container" style="margin-bottom: 15px">
       <!-- 书名输入 -->
-      <el-input v-model="queryParam.bookname" placeholder="书名" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="queryParam.bookname" placeholder="书名" style="width: 200px;" class="filter-item"
+        @keyup.enter.native="handleFilter" />
       <!-- 作者输入 -->
-      <el-input v-model="queryParam.bookauthor" placeholder="作者" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="queryParam.bookauthor" placeholder="作者" style="width: 200px;" class="filter-item"
+        @keyup.enter.native="handleFilter" />
+      <!-- ISBN输入 -->
+      <el-input v-model="queryParam.isbn" placeholder="ISBN" style="width: 200px;" class="filter-item"
+        @keyup.enter.native="handleFilter" />
       <!-- 类型选择 -->
-      <el-select v-model="queryParam.booktypeid" filterable placeholder="类型" clearable class="filter-item" style="width: 200px">
+      <el-select v-model="queryParam.booktypeid" filterable placeholder="类型" clearable class="filter-item"
+        style="width: 200px">
         <el-option v-for="item in typeData" :key="item.booktypeid" :label="item.booktypename" :value="item.booktypeid" />
       </el-select>
       <!-- 一些按钮 -->
@@ -17,10 +23,12 @@
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleShowAll">
         显示全部
       </el-button>
-      <el-button v-permission="['admin']" class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
+      <el-button v-permission="['admin']" class="filter-item" style="margin-left: 10px;" type="primary"
+        icon="el-icon-edit" @click="handleCreate">
         添加图书
       </el-button>
-      <el-button v-permission="['admin']" class="filter-item" style="margin-left: 10px;" type="danger" icon="el-icon-delete" @click="handleDeleteSome">
+      <el-button v-permission="['admin']" class="filter-item" style="margin-left: 10px;" type="danger"
+        icon="el-icon-delete" @click="handleDeleteSome">
         批量删除
       </el-button>
     </div>
@@ -46,11 +54,8 @@
 
             <el-form-item label="图书类型" prop="booktypeid">
               <el-select v-model="form.booktypeid" placeholder="请选择类型">
-                <el-option
-                    v-for="item in typeData"
-                    :key="item.booktypeid"
-                    :label="item.booktypename"
-                    :value="item.booktypeid">
+                <el-option v-for="item in typeData" :key="item.booktypeid" :label="item.booktypename"
+                  :value="item.booktypeid">
                 </el-option>
               </el-select>
             </el-form-item>
@@ -64,12 +69,8 @@
           <div align="center">
             <h3>点击下方图片上传封面</h3>
             <!--上传图片-->
-            <el-upload
-                class="avatar-uploader"
-                action="http://localhost:8092/BookManager/update/updateImg"
-                :show-file-list="false"
-                :on-success="handleAvatarSuccess"
-                :before-upload="beforeAvatarUpload">
+            <el-upload class="avatar-uploader" action="http://localhost:8092/BookManager/update/updateImg"
+              :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
               <img v-if="form.bookimg" :src="form.bookimg" class="avatar" alt="封面无法显示">
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
@@ -88,15 +89,11 @@
     <el-dialog title="选择用户" :visible.sync="dialogFormVisible2" width="400px">
       <el-form :model="form2">
         <el-form-item label="用户名" prop="userid" label-width="80px">
-              <el-select v-model="form2.booktypeid" placeholder="请选择用户">
-                <el-option
-                    v-for="item in userData"
-                    :key="item.userid"
-                    :label="item.username"
-                    :value="item.userid">
-                </el-option>
-              </el-select>
-            </el-form-item>
+          <el-select v-model="form2.booktypeid" placeholder="请选择用户">
+            <el-option v-for="item in userData" :key="item.userid" :label="item.username" :value="item.userid">
+            </el-option>
+          </el-select>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible2 = false">取 消</el-button>
@@ -109,7 +106,7 @@
       <el-row>
         <el-col :span="16">
           <!--普通表单-->
-          <el-form :model="form3"  label-width="80px">
+          <el-form :model="form3" label-width="80px">
 
             <el-form-item label="图书名称" prop="bookname">
               <el-input v-model="form3.bookname" readonly></el-input>
@@ -124,13 +121,8 @@
               </el-input>
             </el-form-item>
             <el-form-item label="评分" prop="myRate">
-              <el-rate
-              margin-top='10px'
-                v-model="form3.myRate"
-                show-text
-                :texts="['很差','较差','还行','推荐','力荐']"
-                :colors="colors"        
-                >
+              <el-rate margin-top='10px' v-model="form3.myRate" show-text :texts="['很差', '较差', '还行', '推荐', '力荐']"
+                :colors="colors">
               </el-rate>
             </el-form-item>
           </el-form>
@@ -139,7 +131,6 @@
           <div align="center">
             <img v-if="form3.bookimg" :src="form3.bookimg" class="avatar" alt="封面无法显示">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-            </el-upload>
           </div>
         </el-col>
       </el-row>
@@ -151,60 +142,27 @@
     </el-dialog>
 
     <!--数据表格-->
-    <el-table
-        ref="multipleTable"
-        :data="tableData"
-        border
-        style="width: 100%">
-      <el-table-column
-          fixed
-          type="selection"
-          width="55">
+    <el-table ref="multipleTable" :data="tableData" border style="width: 100%">
+      <el-table-column fixed type="selection" width="55">
       </el-table-column>
-      <el-table-column
-          fixed
-          prop="bookId"
-          label="序号"
-          width="100">
+      <el-table-column fixed prop="bookId" label="序号" width="100">
       </el-table-column>
-      <el-table-column
-          v-if="roleIsAdmin === false"
-          label="图书封面"
-          width="155">
-          <template slot-scope="scope">
-            <el-image :src="scope.row.bookimg" style="width: 130px; height: 180px"></el-image>
-          </template>
+      <el-table-column v-if="roleIsAdmin === false" label="图书封面" width="155">
+        <template slot-scope="scope">
+          <el-image :src="scope.row.bookimg" style="width: 130px; height: 180px"></el-image>
+        </template>
       </el-table-column>
-      <el-table-column
-          prop="bookname"
-          label="图书名称"
-          width="150"
-          show-overflow-tooltip>
+      <el-table-column prop="bookname" label="图书名称" width="150" show-overflow-tooltip>
       </el-table-column>
-      <el-table-column
-          prop="bookauthor"
-          label="图书作者"
-          width="100"
-          show-overflow-tooltip>
+      <el-table-column prop="bookauthor" label="图书作者" width="100" show-overflow-tooltip>
       </el-table-column>
-      <el-table-column
-          prop="bookprice"
-          label="图书价格"
-          width="100">
+      <el-table-column prop="bookprice" label="图书价格" width="100">
       </el-table-column>
-      <el-table-column
-          prop="booktypename"
-          label="图书类型名"
-          width="100"
-          show-overflow-tooltip>
+      <el-table-column prop="booktypename" label="图书类型名" width="100" show-overflow-tooltip>
       </el-table-column>
-      <el-table-column
-          prop="bookdesc"
-          label="图书描述"
-          min-width="300"
-          show-overflow-tooltip>
+      <el-table-column prop="bookdesc" label="图书描述" min-width="300" show-overflow-tooltip>
       </el-table-column>
-      <el-table-column
+      <!-- <el-table-column
           label="图书评分"
           v-if="roleIsAdmin === false" 
           width="100">
@@ -212,42 +170,55 @@
             <span v-if="scope.row.bookSore === null" style="color: red">{{scope.row.bookSore}}</span>
             <span v-else style="color: #1aac1a">{{scope.row.bookSore === 0 ? '暂无评分' : scope.row.bookSore}}</span>
           </template>
-      </el-table-column>
-      <el-table-column
-          label="图书库存"
-          v-if="roleIsAdmin === true" 
-          :filters="[{text: '无库存', value: 0}]"
-          :filter-method="filterHandler"
-          width="100">
-          <template slot-scope="scope">
-            <span v-if="scope.row.bookNum === 0" style="color: red">{{scope.row.bookNum}}</span>
-            <span v-else style="color: #1aac1a">{{scope.row.bookNum}}</span>
-          </template>
-      </el-table-column>
-      <el-table-column
-          fixed="right"
-          label="操作"
-          :width="roleIsAdmin?'240px':'180px'">
+      </el-table-column> -->
+      <el-table-column label="图书信息" width="300">
         <template slot-scope="scope">
-          <el-button v-permission="['admin']" @click="handleUpdate(scope.row)" type="primary" size="small">编辑</el-button>
-          <el-button v-permission="['admin']" @click="handleDelete(scope.row,scope.$index)" type="danger" size="small">删除</el-button>
-          <el-button v-permission="['reader']" @click="handleRate(scope.row,scope.$index)" type="primary" size="small">评分</el-button>
-          <el-button @click="handleBorrow(scope.row)" type="success" size="small">借阅图书</el-button>
+          <div class="info-row">
+            <span v-if="scope.row.bookNum === 0" class="no-stock">暂无库存</span>
+            <span v-else class="available">可借阅</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">可借阅数量: </span>
+            <span>{{ scope.row.bookNum }}</span>
+          </div>
+          <div class="info-row">
+            <span v-if="scope.row.bookSore === null" class="no-score">暂无评分</span>
+            <span v-else class="score">评分: {{ scope.row.bookSore.toFixed(1) }}</span>
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column label="图书库存" v-if="roleIsAdmin === true" :filters="[{ text: '无库存', value: 0 }]"
+        :filter-method="filterHandler" width="100">
+        <template slot-scope="scope">
+          <span v-if="scope.row.bookNum === 0" style="color: red">{{ scope.row.bookNum }}</span>
+          <span v-else style="color: #1aac1a">{{ scope.row.bookNum }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column fixed="right" label="操作" :width="roleIsAdmin ? '240px' : '180px'">
+        <template slot-scope="scope">
+          <el-button v-permission="['admin']" @click="handleUpdate(scope.row)" type="primary" size="small">
+            编辑
+          </el-button>
+          <el-button v-permission="['admin']" @click="handleDelete(scope.row, scope.$index)" type="danger" size="small">
+            删除
+          </el-button>
+          <el-button v-permission="['reader']" @click="handleRate(scope.row, scope.$index)" type="primary" size="small">
+            评分
+          </el-button>
+          <el-button v-if="scope.row.bookNum === 0" @click="handleReservation(scope.row)" type="success" size="small">
+            预约图书
+          </el-button>
+          <el-button v-else @click="handleBorrow(scope.row)" type="success" size="small">
+            借阅图书
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
 
     <!--分页条-->
-    <el-pagination
-        background
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page.sync="queryParam.page"
-        :page-sizes="[5, 10, 20, 50]"
-        :page-size="queryParam.limit"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="recordTotal"
-        style="margin-top: 15px">
+    <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"
+      :current-page.sync="queryParam.page" :page-sizes="[5, 10, 20, 50]" :page-size="queryParam.limit"
+      layout="total, sizes, prev, pager, next, jumper" :total="recordTotal" style="margin-top: 15px">
     </el-pagination>
   </div>
 </template>
@@ -276,13 +247,13 @@ export default {
   created() {
     // 从服务器获取数据表格第一页的信息
     queryBookInfosByPage(this.queryParam).then(res => {
-      console.log('首页数据获取成功',res)
+      console.log('首页数据获取成功', res)
       this.tableData = res.data
       this.recordTotal = res.count
     })
     // 从服务器获取所有的图书类型
     queryBookTypes().then(res => {
-      console.log('图书类型获取成功',res)
+      console.log('图书类型获取成功', res)
       this.typeData = res
     })
   },
@@ -298,9 +269,9 @@ export default {
       const params = this.queryParam
       params.limit = curSize
       queryBookInfosByPage(params).then(res => {
-            console.log('分页数据获取成功',res)
-            this.tableData = res.data
-            this.recordTotal = res.count
+        console.log('分页数据获取成功', res)
+        this.tableData = res.data
+        this.recordTotal = res.count
       })
     },
 
@@ -309,9 +280,9 @@ export default {
       const params = this.queryParam
       params.page = curPage
       queryBookInfosByPage(params).then(res => {
-            console.log('分页数据获取成功',res)
-            this.tableData = res.data
-            this.recordTotal = res.count
+        console.log('分页数据获取成功', res)
+        this.tableData = res.data
+        this.recordTotal = res.count
       })
     },
 
@@ -319,7 +290,7 @@ export default {
     handleFilter() {
       this.queryParam.page = 1
       queryBookInfosByPage(this.queryParam).then(res => {
-        if(res.code === 0) {
+        if (res.code === 0) {
           this.tableData = res.data
           this.recordTotal = res.count
         }
@@ -333,7 +304,7 @@ export default {
       this.queryParam.bookauthor = null
       this.queryParam.booktypeid = null
       queryBookInfosByPage(this.queryParam).then(res => {
-        if(res.code === 0) {
+        if (res.code === 0) {
           this.tableData = res.data
           this.recordTotal = res.count
         }
@@ -344,7 +315,7 @@ export default {
     handleAvatarSuccess(res, file) {
       console.log(res)
       console.log(file)
-      if(res.code === 0) {
+      if (res.code === 0) {
         this.$message.success('上传成功');
         this.form.bookimg = res.data
       } else {
@@ -370,7 +341,7 @@ export default {
     handleCreate() {
       // 从服务器获取所有的图书类型
       queryBookTypes().then(res => {
-        console.log('图书类型获取成功',res)
+        console.log('图书类型获取成功', res)
         this.typeData = res
       })
       // 表单是添加状态
@@ -394,7 +365,7 @@ export default {
     handleUpdate(row) {
       // 从服务器获取所有的图书类型
       queryBookTypes().then(res => {
-        console.log('图书类型获取成功',res)
+        console.log('图书类型获取成功', res)
         this.typeData = res
       })
       // 表单是编辑状态
@@ -429,7 +400,7 @@ export default {
       } else {
         this.$confirm('您确定要借书吗?', '提示').then(() => {
           borrowBook(this.id, row.bookid).then(res => {
-            if(res === 1) {
+            if (res === 1) {
               this.$message.success('借书成功')
               this.handleCurrentChange(this.queryParam.page)
             } else {
@@ -445,7 +416,7 @@ export default {
     submitForm() {
       if (this.formType === 0) {  // 添加记录
         addBookInfo(this.form).then(res => {
-          if(res === 1) {
+          if (res === 1) {
             this.$message.success('添加记录成功')
             // 跳转到末尾
             getCount().then(res => {
@@ -458,9 +429,9 @@ export default {
           }
           this.dialogFormVisible = false  // 关闭对话框
         })
-      } else if(this.formType === 1) {  //更新记录
+      } else if (this.formType === 1) {  //更新记录
         updateBookInfo(this.form).then(res => {
-          if(res === 1) {
+          if (res === 1) {
             this.$message.success('更新记录成功')
             this.handleCurrentChange(this.queryParam.page)
           } else {
@@ -474,7 +445,7 @@ export default {
     // 借书的提交表单
     submitForm2() {
       borrowBook(this.form2.userid, this.form2.bookid).then(res => {
-        if(res === 1) {
+        if (res === 1) {
           this.$message.success('借书成功')
           this.handleCurrentChange(this.queryParam.page)
         } else {
@@ -492,11 +463,11 @@ export default {
         type: 'warning'
       }).then(() => {
         deleteBookInfo(row).then(res => {
-          if(res === 1) {
+          if (res === 1) {
             this.$message.success('删除记录成功')
             this.tableData.splice(index, 1)
             // 如果删完了，获取上一页
-            if(this.tableData.length === 0) {
+            if (this.tableData.length === 0) {
               this.queryParam.page = this.queryParam.page - 1
               this.handleCurrentChange(this.queryParam.page)
             }
@@ -517,11 +488,11 @@ export default {
         // 获取选中的对象数组
         const items = this.$refs.multipleTable.selection
         deleteBookInfos(items).then(res => {
-          if(res > 0) {
+          if (res > 0) {
             this.$message.success('删除' + res + '条记录成功')
-            if(this.tableData.length === res) {  //如果本页内容全部删光了
+            if (this.tableData.length === res) {  //如果本页内容全部删光了
               //当前页为上一页
-              if(this.queryParam.page !== 0) {
+              if (this.queryParam.page !== 0) {
                 this.queryParam.page = this.queryParam.page - 1
               }
             }
@@ -535,13 +506,13 @@ export default {
     },
 
     // 筛选有无库存
-    filterHandler(value, row, column){
+    filterHandler(value, row, column) {
 
       return row['bookNum'] === value;
     },
 
     // 评分
-    handleRate( row, column){
+    handleRate(row, column) {
       this.form3 = {
         bookid: row.bookId,
         bookname: row.bookname,
@@ -552,7 +523,7 @@ export default {
         isborrowed: row.isborrowed,
         bookimg: row.bookimg,
         bookSore: row.bookSore,
-        myRate:0
+        myRate: 0
       }
 
       // 显示表单框
@@ -560,7 +531,7 @@ export default {
     },
 
     // 提交评分
-    submitForm3(){
+    submitForm3() {
       // updateBookInfo(this.form).then(res => {
       //     if(res === 1) {
       //       this.$message.success('更新记录成功')
@@ -570,23 +541,23 @@ export default {
       //     }
       //     this.dialogFormVisible = false  // 关闭对话框
       //   })
-      
+
       // 当前form3的信息
       let submitData = {
-        "bookid" : this.form3.bookid,
-        "score" : this.form3.myRate * 2,
-        "userid" : this.id
+        "bookid": this.form3.bookid,
+        "score": this.form3.myRate * 2,
+        "userid": this.id
       }
 
       addRateBook(submitData).then(res => {
-        if(res.status === 'ok'){
+        if (res.status === 'ok') {
           this.$message.success('评分成功')
           this.handleCurrentChange(this.queryParam.page)
-        } else{
+        } else {
           this.$message.error('评分失败')
         }
         // 显示表单框
-      this.dialogFormVisible3 = false
+        this.dialogFormVisible3 = false
       })
     }
 
@@ -607,7 +578,8 @@ export default {
         limit: 10,
         bookname: null,
         bookauthor: null,
-        booktypeid: null
+        booktypeid: null,
+        isbn: null
       },
       // 对话框表单显示
       dialogFormVisible: false,
@@ -630,7 +602,7 @@ export default {
         userid: 1,
         bookid: 1
       },
-      form3:{
+      form3: {
         bookid: null,
         bookname: '',
         bookauthor: '',
@@ -639,8 +611,8 @@ export default {
         bookdesc: '',
         isborrowed: 0,
         bookimg: '',
-        bookSore:'',
-        myRate:''
+        bookSore: '',
+        myRate: ''
       },
       colors: ['#99A9BF', '#F7BA2A', '#FF9900'],
       rules: {
@@ -667,13 +639,13 @@ export default {
   },
   computed: {
     // 获得user信息
-    ...mapGetters(['id','name','roles']),
+    ...mapGetters(['id', 'name', 'roles']),
     // 通过表单类型计算表单标题
     formTitle() {
       return this.formType === 0 ? '添加记录' : '修改记录'
     },
     roleIsAdmin() {
-      if(this.roles[0] === 'admin') return true
+      if (this.roles[0] === 'admin') return true
       else return false
     }
   }
@@ -682,31 +654,34 @@ export default {
 </script>
 
 <style scoped>
-  .avatar-uploader .el-upload {
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-  }
-  .avatar-uploader .el-upload:hover {
-    border-color: #409EFF;
-  }
-  .avatar-uploader-icon {
-    font-size: 28px;
-    color: #8c939d;
-    width: 178px;
-    height: 178px;
-    line-height: 178px;
-    text-align: center;
-  }
-  .avatar {
-    width: 150px;
-    height: 200px;
-    display: block;
-  }
-  
-  .el-rate{
-    line-height:3;
-  }
+.avatar-uploader .el-upload {
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.avatar-uploader .el-upload:hover {
+  border-color: #409EFF;
+}
+
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  line-height: 178px;
+  text-align: center;
+}
+
+.avatar {
+  width: 150px;
+  height: 200px;
+  display: block;
+}
+
+.el-rate {
+  line-height: 3;
+}
 </style>

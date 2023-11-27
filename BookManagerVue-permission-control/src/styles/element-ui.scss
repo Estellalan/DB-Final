@@ -47,3 +47,34 @@
 .el-range-separator {
   box-sizing: content-box;
 }
+
+
+
+.info-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid #ccc;
+  padding: 8px 0;
+}
+
+.info-label {
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.no-stock {
+  color: red;
+}
+
+.available {
+  color: #1aac1a;
+}
+
+.no-score {
+  color: red;
+}
+
+.score {
+  color: #1aac1a;
+}
